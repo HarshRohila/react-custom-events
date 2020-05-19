@@ -1,7 +1,7 @@
 {
   "name": "react-custom-events",
   "version": "1.0.0",
-  "description": "",
+  "description": "A react layer for easily utilizing CustomEvent API",
   "main": "dist/index.js",
   "scripts": {
     "build": "rollup -c",
