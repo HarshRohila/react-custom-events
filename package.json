@@ -1,0 +1,39 @@
+{
+  "name": "react-custom-events",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "rollup -c",
+    "start": "rollup -c -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HarshRohila/react-custom-events.git"
+  },
+  "author": "Harsh Rohila",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/HarshRohila/react-custom-events/issues"
+  },
+  "homepage": "https://github.com/HarshRohila/react-custom-events#readme",
+  "devDependencies": {
+    "@types/react": "^16.9.35",
+    "@types/react-dom": "^16.9.8",
+    "babel-core": "^6.26.3",
+    "babel-runtime": "^6.26.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "rollup": "^2.10.4",
+    "rollup-plugin-typescript2": "^0.27.1",
+    "typescript": "^3.9.2"
+  },
+  "peerDependencies": {
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0"
+  },
+  "files": [
+    "dist"
+  ],
+  "dependencies": {}
+}
