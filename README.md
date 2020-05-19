@@ -1,6 +1,6 @@
 # react-custom-events
 
-### Problem
+### Why
 React way of handling events is to pass callbacks to child components.
 This becomes cumbersome when child is several levels deep.
 
@@ -13,6 +13,11 @@ I prefer the [web components](https://developer.mozilla.org/en-US/docs/Web/Web_C
 This package is a react layer above CustomEvent
 
 ### How to use
+
+##### Installation
+```sh
+npm i react-custom-events
+```
 
 ##### Emit Event
 ```javascript
