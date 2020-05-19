@@ -35,5 +35,14 @@
   "files": [
     "dist"
   ],
+  "keywords": [
+    "react",
+    "events",
+    "custom events",
+    "event emitter",
+    "useCustomEventListener",
+    "emitCustomEvent",
+    "CustomEvent"
+  ],
   "dependencies": {}
 }
