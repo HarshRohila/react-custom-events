@@ -12,7 +12,7 @@ const getElement = () => {
     return window._customEventTargetElement;
 }
 
-export function useCustomEventListener<T>(eventName: string, eventHandler: (data?: T) => void): void {
+export function useCustomEventListener<T>(eventName: string, eventHandler: (data: T) => void): void {
     useEffect(() => {
         const element = getElement();
         const handleEvent = (event: CustomEvent | Event) => {
