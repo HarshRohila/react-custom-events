@@ -43,6 +43,5 @@
     "useCustomEventListener",
     "emitCustomEvent",
     "CustomEvent"
-  ],
-  "dependencies": {}
+  ]
 }

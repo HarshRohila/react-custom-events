@@ -1,35 +1,55 @@
-import { useEffect } from "react";
+import { MutableRefObject, RefObject, useEffect } from 'react';
 
-declare global {
-    interface Window { _customEventTargetElement: undefined | HTMLDivElement; }
+export interface TypedCustomEvent<T> extends CustomEvent {
+    detail: T;
 }
 
-const getElement = () => {
-    if ( !window._customEventTargetElement ) {
-        window._customEventTargetElement = document.createElement('div');
-    }
-
-    return window._customEventTargetElement;
+function isRef(element: any): element is RefObject<HTMLElement> | MutableRefObject<HTMLElement> {
+    const current = element.current ?? null;
+    return current instanceof HTMLElement;
 }
 
-export function useCustomEventListener<T>(eventName: string, eventHandler: (data?: T) => void): void {
+function unwrapDomElement(element: HTMLElement | RefObject<HTMLElement> | MutableRefObject<HTMLElement>): HTMLElement | null {
+    return isRef(element) ? element.current : element;
+}
+
+export function useCustomEventListener<T = any>(
+    listenerTarget: HTMLElement | RefObject<HTMLElement> | MutableRefObject<HTMLElement>,
+    event: string,
+    eventHandler: (event: TypedCustomEvent<T>) => void,
+    options?: AddEventListenerOptions
+): void {
     useEffect(() => {
-        const element = getElement();
-        const handleEvent = (event: CustomEvent | Event) => {
-            const data = (event as CustomEvent).detail;
-            eventHandler(data);
+        const listenerTargetElement = unwrapDomElement(listenerTarget);
+        if (listenerTargetElement === null) {
+            return;
+        }
+
+        const handleEvent = (customEvent: CustomEvent | Event) => {
+            eventHandler(customEvent as TypedCustomEvent<T>);
         };
 
-        element.addEventListener(eventName, handleEvent, false);
+        const listenerOptions: AddEventListenerOptions | false = options ?? false;
+        listenerTargetElement.addEventListener(event, handleEvent, listenerOptions);
 
         return () => {
-            element.removeEventListener(eventName, handleEvent, false);
+            listenerTargetElement.removeEventListener(event, handleEvent, listenerOptions);
         };
     });
 }
 
-export function emitCustomEvent<T>(eventName: string, data?: T): void {
-    const element = getElement();
-    const event = new CustomEvent(eventName, { detail: data });
-    element.dispatchEvent(event);
+export function emitCustomEvent<T = any>(
+    eventTarget: HTMLElement | RefObject<HTMLElement> | MutableRefObject<HTMLElement>,
+    event: string,
+    payload?: T,
+    options?: EventInit
+): void {
+    const eventTargetElement = unwrapDomElement(eventTarget);
+    if (eventTargetElement === null) {
+        return;
+    }
+
+    const eventInit = (options ?? {}) as CustomEventInit;
+    eventInit.detail = payload ?? null;
+    eventTargetElement.dispatchEvent(new CustomEvent(event, eventInit));
 }
