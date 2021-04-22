@@ -12,26 +12,24 @@ const getElement = () => {
     return window._customEventTargetElement;
 }
 
-const useCustomEventListener = (eventName: string, eventHandler: (data?: any) => void) => {
+export function useCustomEventListener<T>(eventName: string, eventHandler: (data?: T) => void): void {
     useEffect(() => {
         const element = getElement();
         const handleEvent = (event: CustomEvent | Event) => {
             const data = (event as CustomEvent).detail;
-            eventHandler( data );
-        } 
-    
+            eventHandler(data);
+        };
+
         element.addEventListener(eventName, handleEvent, false);
-    
+
         return () => {
             element.removeEventListener(eventName, handleEvent, false);
-        }
-    })
+        };
+    });
 }
 
-const emitCustomEvent = (eventName: string, data?: any) => {
+export function emitCustomEvent<T>(eventName: string, data?: T): void {
     const element = getElement();
     const event = new CustomEvent(eventName, { detail: data });
-    element.dispatchEvent( event );
+    element.dispatchEvent(event);
 }
-
-export { useCustomEventListener, emitCustomEvent };
