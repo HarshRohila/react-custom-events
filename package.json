@@ -6,7 +6,8 @@
   "scripts": {
     "build": "rollup -c",
     "start": "rollup -c -w",
-    "test": "jest"
+    "test": "jest",
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
