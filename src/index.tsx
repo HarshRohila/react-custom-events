@@ -4,13 +4,13 @@ declare global {
     interface Window { _customEventTargetElement: undefined | HTMLDivElement; }
 }
 
-const getElement = () => {
-    if ( !window._customEventTargetElement ) {
-        window._customEventTargetElement = document.createElement('div');
-    }
+const getElement = (function () {
+    const targetElement = document.createElement('div')
 
-    return window._customEventTargetElement;
-}
+    return function () {
+        return targetElement;
+    }
+}());
 
 export function useCustomEventListener<T>(eventName: string, eventHandler: (data: T) => void): void {
     useEffect(() => {
