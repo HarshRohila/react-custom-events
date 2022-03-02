@@ -1,9 +1,5 @@
 import { useEffect } from "react";
 
-declare global {
-    interface Window { _customEventTargetElement: undefined | HTMLDivElement; }
-}
-
 const getElement = (function () {
     const targetElement = document.createElement('div')
 
