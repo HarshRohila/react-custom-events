@@ -46,7 +46,3 @@ useCustomEventListener('my-event', data => {
 No need to remove event listener, it uses react's useEffect hook to remove listener on component unmount
 
 And no need to worry about where component is present in dom, these events can be sent and listened to anywhere
-
-
-##### Notes
-* Will support class components in future, for now addEventListener can be used
