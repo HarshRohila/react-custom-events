@@ -1,12 +1,14 @@
 import { useEffect } from "react";
 
-const getElement = (function () {
-    const targetElement = document.createElement('div')
+let targetElement: undefined | HTMLDivElement
 
-    return function () {
-        return targetElement;
+function getElement() {
+    if (!targetElement) {
+        targetElement = document.createElement('div')
     }
-}());
+
+    return targetElement
+}
 
 export function useCustomEventListener<T>(eventName: string, eventHandler: (data: T) => void): void {
     useEffect(() => {
@@ -21,7 +23,7 @@ export function useCustomEventListener<T>(eventName: string, eventHandler: (data
         return () => {
             element.removeEventListener(eventName, handleEvent, false);
         };
-    });
+    }, []);
 }
 
 export function emitCustomEvent<T>(eventName: string, data?: T): void {
