@@ -1,6 +1,6 @@
 {
   "name": "react-custom-events",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "A react layer for easily utilizing CustomEvent API",
   "main": "dist/index.js",
   "scripts": {
