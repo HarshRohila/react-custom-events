@@ -2,18 +2,22 @@
  * @jest-environment jsdom
  */
 
-import React, { useState } from 'react';
-import { emitCustomEvent, useCustomEventListener } from '../src/index';
-import { render, screen } from '@testing-library/react';
+import React, { useState } from 'react'
+import { emitCustomEvent, newCustomEventEmitter, useCustomEventListener } from '../src/index'
+import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 type TestProps = {}
 
 const Test = ({}: TestProps) => {
-	const [data, setData] = useState('');
+	const [data, setData] = useState('')
 
-	useCustomEventListener<string>('test-event', data => {
-		setData(data);
+	const listener = useCustomEventListener<string>('hello', (data) => {
+		setData(data)
+	})
+
+	useCustomEventListener<string>('test-event', (data) => {
+		setData(data)
 	})
 
 	const handleIncrement = () => {
@@ -22,18 +26,36 @@ const Test = ({}: TestProps) => {
 
 	return (
 		<>
-			<div data-testid='data'>{data}</div>
-			<button data-testid='button' onClick={handleIncrement}>Fire Event with data</button> 
+			<div ref={listener}>
+				<div data-testid="data">{data}</div>
+				<button data-testid="button" onClick={handleIncrement}>
+					Fire Event with data
+				</button>
+				<TestChild />
+			</div>
 		</>
-	);
-};
+	)
+}
+
+const TestChild = () => {
+	const emitter = newCustomEventEmitter()
+
+	const fireHello = () => {
+		emitter.emit('hello', 'data from hello')
+	}
+
+	return (
+		<button data-testid="fire-hello" ref={emitter} onClick={fireHello}>
+			Fire Hello
+		</button>
+	)
+}
 
 describe('Test Component', () => {
-
 	let data: any
 
 	beforeEach(() => {
-		render(<Test />);
+		render(<Test />)
 		data = screen.getByTestId('data')
 	})
 
@@ -47,5 +69,13 @@ describe('Test Component', () => {
 		userEvent.click(button)
 
 		expect(data.textContent).toBe('test-data')
+	})
+
+	it('sets data on fire-hello button click', () => {
+		const button = screen.getByTestId('fire-hello')
+
+		userEvent.click(button)
+
+		expect(data.textContent).toBe('data from hello')
 	})
 })
