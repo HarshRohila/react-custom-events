@@ -40,7 +40,7 @@ export function emitCustomEvent<T>(eventName: string, data?: T): void {
 	element.dispatchEvent(event)
 }
 
-export function newEventEmitter() {
+export function newCustomEventEmitter() {
 	let element: HTMLElement | null
 	function setElement(el: HTMLElement | null) {
 		element = el

@@ -3,7 +3,7 @@
  */
 
 import React, { useState } from 'react'
-import { emitCustomEvent, newEventEmitter, useCustomEventListener } from '../src/index'
+import { emitCustomEvent, newCustomEventEmitter, useCustomEventListener } from '../src/index'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
@@ -12,11 +12,11 @@ type TestProps = {}
 const Test = ({}: TestProps) => {
 	const [data, setData] = useState('')
 
-	useCustomEventListener<string>('test-event', (data) => {
+	const listener = useCustomEventListener<string>('hello', (data) => {
 		setData(data)
 	})
 
-	const listener = useCustomEventListener<string>('hello', (data) => {
+	useCustomEventListener<string>('test-event', (data) => {
 		setData(data)
 	})
 
@@ -38,7 +38,7 @@ const Test = ({}: TestProps) => {
 }
 
 const TestChild = () => {
-	const emitter = newEventEmitter()
+	const emitter = newCustomEventEmitter()
 
 	const fireHello = () => {
 		emitter.emit('hello', 'data from hello')
@@ -71,8 +71,9 @@ describe('Test Component', () => {
 		expect(data.textContent).toBe('test-data')
 	})
 
-	it('sets data fire-hello button click', () => {
+	it('sets data on fire-hello button click', () => {
 		const button = screen.getByTestId('fire-hello')
+
 		userEvent.click(button)
 
 		expect(data.textContent).toBe('data from hello')
