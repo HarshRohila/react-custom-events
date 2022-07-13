@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { DependencyList, useEffect } from 'react'
 
 let targetElement: undefined | HTMLDivElement
 
@@ -12,9 +12,11 @@ function getElement() {
 
 export function useCustomEventListener<T>(
 	eventName: string,
-	eventHandler: (data: T) => void
+	eventHandler: (data: T) => void,
+	deps?: DependencyList
 ): (el: HTMLElement | null) => void {
 	let element: HTMLElement | null
+
 	useEffect(() => {
 		element = element || getElement()
 		const handleEvent = (event: CustomEvent | Event) => {
@@ -27,7 +29,7 @@ export function useCustomEventListener<T>(
 		return () => {
 			element?.removeEventListener(eventName, handleEvent, false)
 		}
-	}, [])
+	}, deps)
 
 	return (el: HTMLElement | null) => {
 		element = el
