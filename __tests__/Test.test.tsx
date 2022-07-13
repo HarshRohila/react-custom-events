@@ -79,3 +79,56 @@ describe('Test Component', () => {
 		expect(data.textContent).toBe('data from hello')
 	})
 })
+
+describe('useCustomEventListener', () => {
+	interface TestComponentProps {
+		evenFired: (text: string) => void
+	}
+
+	const TestComponent = ({ evenFired }: TestComponentProps) => {
+		const [text, setText] = useState('initial')
+
+		useCustomEventListener(
+			'eventFired',
+			() => {
+				evenFired(text)
+			},
+			[text]
+		)
+
+		const handleStateChange = () => setText('changed')
+
+		const handleEventFire = () => emitCustomEvent('eventFired')
+
+		return (
+			<>
+				<button data-testid="state-changer" onClick={handleStateChange}>
+					Change State
+				</button>
+				<button data-testid="fire-event-btn" onClick={handleEventFire}>
+					Fire Event with data
+				</button>
+			</>
+		)
+	}
+	test('its callback having latest state', (done) => {
+		render(
+			<TestComponent
+				evenFired={(text: string) => {
+					try {
+						expect(text).toBe('changed')
+						done()
+					} catch (cause) {
+						done(cause)
+					}
+				}}
+			/>
+		)
+
+		const stateChangerBtn = screen.getByTestId('state-changer')
+		userEvent.click(stateChangerBtn)
+
+		const fireBtn = screen.getByTestId('fire-event-btn')
+		userEvent.click(fireBtn)
+	})
+})

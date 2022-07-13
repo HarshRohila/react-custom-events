@@ -49,6 +49,18 @@ useCustomEventListener('my-event', (data) => {
 })
 ```
 
+If using state in listener handler, it's recommended to provide dependency list (same as second parameter of `useEffect`)
+
+```javascript
+useCustomEventListener(
+	'my-event',
+	(data) => {
+		doSomethingWithDataAndStates(data, state1, state2)
+	},
+	[state1, state2]
+)
+```
+
 No need to remove event listener, it uses react's useEffect hook to remove listener on component unmount
 
 And no need to worry about where component is present in dom, these events can be sent and listened to anywhere
